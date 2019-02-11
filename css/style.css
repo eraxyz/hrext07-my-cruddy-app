@@ -1,0 +1,19 @@
+.container-window{
+  display: flex;
+  flex-direction: column;
+}
+
+.container-main{
+  border: 2px solid black;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.container-image{
+  border: 2px solid black;
+}
+
+.container-data{
+  border: 2px solid black;
+}
