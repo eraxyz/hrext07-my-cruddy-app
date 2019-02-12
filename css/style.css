@@ -7,13 +7,27 @@
   border: 2px solid black;
   display: flex;
   flex-direction: row;
-  justify-content: center;
 }
 
 .container-image{
   border: 2px solid black;
+  display: flex;
+  flex-direction: column;
+  width: 500px;
 }
 
 .container-data{
   border: 2px solid black;
+  padding: 10px;
+}
+
+.buttons{
+  visibility: hidden;
+  align-self: center;
+}
+
+.card-image{
+  height: 310px;
+  width: 223px;
+  align-self: center;
 }

@@ -20,6 +20,7 @@ $(document).ready(function(){
 
   $('.btn-add').on('click', function(e){
 
+    //0. Clear results box1
     //1. Get input string
     //2. Search for matching cards using mtg api
     //3. Display matches in container-data
@@ -28,23 +29,23 @@ $(document).ready(function(){
     //6. Clear input string
     //7. (Opt) Display card text under card image
 
-
+    $('.container-data').text('');
     var searchData = $('.input-key').val();
 
       $.getJSON("https://api.magicthegathering.io/v1/cards?name=" + searchData, function(data){
       console.log(data);
 
       for(value of data.cards){
-        $('.container-data').append("<div>" + value.name + "</div>");
+        $('.container-data').append('<div class="display-result">' + value.name + '</div>');
         if (value.name === searchData){
-          var cardImage = value.imageUrl;
           $('.card-image').attr("src", value.imageUrl);
+          $('.buttons').css("visibility", "visible");
           //localStorage.setItem(cardName, JSON.stringify(value));
           break;
         }
       }
 
-      $('.container-data').prepend("<h2> Results for: " + searchData+ " </h2>");
+      $('.container-data').prepend("<h3> Results for: " + searchData+ " </h3>");
 
     });
 
@@ -57,16 +58,46 @@ $(document).ready(function(){
     // need to expand when  more than 1 item is added
 
   // delete item
-  $('.container-data').on('click', '.display-data-item', function(e){
-    console.log(e.currentTarget.dataset.keyvalue);
-    var keyData = e.currentTarget.dataset.keyvalue;
-    localStorage.removeItem(keyData);
-    $('.container-data').text('');
+  $('.container-data').on('click', '.display-result', function(e){
+    //console.log(e.currentTarget.innerText);
+      $.getJSON("https://api.magicthegathering.io/v1/cards?name=" + e.currentTarget.innerText, function(data){
+        console.log(data);
+
+        for(value of data.cards){
+          if (value.name === e.currentTarget.innerText){
+            $('.card-image').attr("src", value.imageUrl);
+            //localStorage.setItem(cardName, JSON.stringify(value));
+            break;
+          }
+        }
+
+      });
   });
   // delete all?
   $('.btn-clear').click(function(){
     localStorage.clear();
     $('.container-data').text('');
   });
+
+  // View previous card
+  $('.btn-previous-card').click(function(){
+
+  });
+
+  // View next card
+  $('.btn-next-card').click(function(){
+
+  });
+
+  // Add to collection
+  $('.btn-add-collection').click(function(){
+
+  });
+
+  // Add to wishlist
+  $('.btn-add-wishlist').click(function(){
+
+  });
+
 
 });
