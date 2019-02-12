@@ -56,6 +56,8 @@ $(document).ready(function(){
           $('.buttons').css("visibility", "visible");
           currentCard = value;
           delete currentCard.foreignNames;
+          $('.display-quantities').text('');
+          searchQuantities();
           //localStorage.setItem(cardName, JSON.stringify(value));
           break;
         }
@@ -83,6 +85,8 @@ $(document).ready(function(){
           if (value.name === e.currentTarget.innerText){
             $('.card-image').attr("src", value.imageUrl);
             currentCard = value;
+            $('.display-quantities').text('');
+            searchQuantities();
             delete currentCard.foreignNames;
             //localStorage.setItem(cardName, JSON.stringify(value));
             break;
@@ -148,5 +152,32 @@ $(document).ready(function(){
     wishlist.push(currentCard);
     localStorage.setItem("Wishlist", JSON.stringify(wishlist));
   });
+
+
+  function searchQuantities(){
+
+    // Search collection for quantity
+    for (var collectionItem of collection){
+      if (collectionItem.name === currentCard.name){
+        $('.display-quantities').append('<div> # in collection: ' + collectionItem.collectionQuantity + '</div>');
+      }
+    }
+    // If not in collection display 0
+    if (document.getElementsByClassName('display-quantities')[0].children.length === 0){
+      console.log('here');
+      $('.display-quantities').append('<div> # in collection: 0 </div>');
+    }
+    // Search wishlist for quantity
+    for (var wishlistItem of wishlist){
+      if (wishlistItem.name === currentCard.name){
+        $('.display-quantities').append('<div> # in wishlist: ' + wishlistItem.wishlistQuantity + '</div>');
+      }
+    }
+    // If not in wishlist display 0
+    if (document.getElementsByClassName('display-quantities')[0].children.length === 1){
+      console.log('here');
+      $('.display-quantities').append('<div> # in wishlist: 0 </div>');
+    }
+  }
 
 });
