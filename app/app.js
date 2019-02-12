@@ -18,6 +18,20 @@ interact with localstorage
 
 $(document).ready(function(){
 
+  var collection = JSON.parse(localStorage.getItem('Collection'));
+  var wishlist = JSON.parse(localStorage.getItem('Wishlist'));
+
+  if (collection === null){
+    collection = [];
+  }
+  if (wishlist === null){
+    wishlist = [];
+  }
+  console.log(collection);
+
+  // Curent Card
+  var currentCard;
+
   $('.btn-add').on('click', function(e){
 
     //0. Clear results box1
@@ -40,6 +54,8 @@ $(document).ready(function(){
         if (value.name === searchData){
           $('.card-image').attr("src", value.imageUrl);
           $('.buttons').css("visibility", "visible");
+          currentCard = value;
+          delete currentCard.foreignNames;
           //localStorage.setItem(cardName, JSON.stringify(value));
           break;
         }
@@ -66,6 +82,8 @@ $(document).ready(function(){
         for(value of data.cards){
           if (value.name === e.currentTarget.innerText){
             $('.card-image').attr("src", value.imageUrl);
+            currentCard = value;
+            delete currentCard.foreignNames;
             //localStorage.setItem(cardName, JSON.stringify(value));
             break;
           }
@@ -92,6 +110,22 @@ $(document).ready(function(){
   // Add to collection
   $('.btn-add-collection').click(function(){
 
+    // Search through collection for card currently being displayed
+    // If found, add 1 to quantity
+    // Else, add to collection with quantity 1.
+    // Update collection on localStorage.
+    // Update quantity in collection text shown below the card
+
+    for (var card of collection){
+      if(card.name === currentCard.name){
+        card.quantity++;
+        localStorage.setItem("Collection", JSON.stringify(collection));
+        return;
+      }
+    }
+    currentCard.quantity = 1;
+    collection.push(currentCard);
+    localStorage.setItem("Collection", JSON.stringify(collection));
   });
 
   // Add to wishlist
