@@ -118,12 +118,12 @@ $(document).ready(function(){
 
     for (var card of collection){
       if(card.name === currentCard.name){
-        card.quantity++;
+        card.collectionQuantity++;
         localStorage.setItem("Collection", JSON.stringify(collection));
         return;
       }
     }
-    currentCard.quantity = 1;
+    currentCard.collectionQuantity = 1;
     collection.push(currentCard);
     localStorage.setItem("Collection", JSON.stringify(collection));
   });
@@ -131,7 +131,22 @@ $(document).ready(function(){
   // Add to wishlist
   $('.btn-add-wishlist').click(function(){
 
-  });
+    // Search through wishlist for card currently being displayed
+    // If found, add 1 to quantity
+    // Else, add to wihslist with quantity 1.
+    // Update wishlist on localStorage.
+    // Update quantity in wishlist text shown below the card
 
+    for (var card of wishlist){
+      if(card.name === currentCard.name){
+        card.wishlistQuantity++;
+        localStorage.setItem("Wishlist", JSON.stringify(wishlist));
+        return;
+      }
+    }
+    currentCard.wishlistQuantity = 1;
+    wishlist.push(currentCard);
+    localStorage.setItem("Wishlist", JSON.stringify(wishlist));
+  });
 
 });
