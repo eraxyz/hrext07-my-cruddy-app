@@ -53,7 +53,7 @@ $(document).ready(function(){
         $('.container-data').append('<div class="display-result">' + value.name + '</div>');
         if (value.name === searchData){
           $('.card-image').attr("src", value.imageUrl);
-          $('.buttons').css("visibility", "visible");
+          $('.btns').css("visibility", "visible");
           currentCard = value;
           delete currentCard.foreignNames;
           searchQuantities();
@@ -110,7 +110,7 @@ $(document).ready(function(){
   });
 
   // Add to collection
-  $('.btn-add-collection').click(function(){
+  $('.add-collection').click(function(){
 
     // Search through collection for card currently being displayed
     // If found, add 1 to quantity
@@ -137,7 +137,7 @@ $(document).ready(function(){
   });
 
   // Add to wishlist
-  $('.btn-add-wishlist').click(function(){
+  $('.add-wishlist').click(function(){
 
     // Search through wishlist for card currently being displayed
     // If found, add 1 to quantity
@@ -166,28 +166,30 @@ $(document).ready(function(){
 
   function searchQuantities(){
 
-    //Clear field
-    $('.display-quantities').text('');
+    var collectionFound = false;
+    var wishlistFound = false;
 
     // Search collection for quantity
     for (var collectionItem of collection){
       if (collectionItem.name === currentCard.name){
-        $('.display-quantities').append('<div> # in collection: ' + collectionItem.collectionQuantity + '</div>');
+        $('.c-qty-text').text('# in collection: ' + collectionItem.collectionQuantity);
+        collectionFound = true;
       }
     }
     // If not in collection display 0
-    if (document.getElementsByClassName('display-quantities')[0].children.length === 0){
-      $('.display-quantities').append('<div> # in collection: 0 </div>');
+    if (collectionFound === false){
+      $('.c-qty-text').text('# in collection: 0');
     }
     // Search wishlist for quantity
     for (var wishlistItem of wishlist){
       if (wishlistItem.name === currentCard.name){
-        $('.display-quantities').append('<div> # in wishlist: ' + wishlistItem.wishlistQuantity + '</div>');
+        $('.w-qty-text').text('# in wishlist: ' + wishlistItem.wishlistQuantity);
+        wishlistFound = true;
       }
     }
     // If not in wishlist display 0
-    if (document.getElementsByClassName('display-quantities')[0].children.length === 1){
-      $('.display-quantities').append('<div> # in wishlist: 0 </div>');
+    if (wishlistFound === false){
+      $('.w-qty-text').text('# in wishlist: 0');
     }
   }
 

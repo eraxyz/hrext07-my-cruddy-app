@@ -21,7 +21,7 @@
   padding: 10px;
 }
 
-.buttons{
+.btns{
   visibility: hidden;
   align-self: center;
 }
@@ -30,4 +30,26 @@
   height: 310px;
   width: 223px;
   align-self: center;
+}
+
+.collection-info{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.wishlist-info{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-around;
+}
+
+.add-wishlist{
+  display: flex;
+  order: 1;
+}
+
+.add-collection{
+  display: flex;
+  order: 1;
 }
