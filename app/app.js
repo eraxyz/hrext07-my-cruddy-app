@@ -57,12 +57,11 @@ $(document).ready(function(){
           currentCard = value;
           delete currentCard.foreignNames;
           searchQuantities();
-          //localStorage.setItem(cardName, JSON.stringify(value));
           break;
         }
       }
 
-      $('.container-data').prepend("<h3> Results for: " + searchData+ " </h3>");
+      $('.container-data').prepend('<h3> Results for: "' + searchData+ '" </h3>');
 
     });
 
@@ -99,16 +98,6 @@ $(document).ready(function(){
     $('.container-data').text('');
   });
 
-  // View previous card
-  $('.btn-previous-card').click(function(){
-
-  });
-
-  // View next card
-  $('.btn-next-card').click(function(){
-
-  });
-
   // Add to collection
   $('.add-collection').click(function(){
 
@@ -131,7 +120,6 @@ $(document).ready(function(){
       collection.push(currentCard);
     }
     localStorage.setItem("Collection", JSON.stringify(collection));
-    // collection = JSON.parse(localStorage.getItem('Collection'));
     searchQuantities();
 
   });
@@ -158,7 +146,6 @@ $(document).ready(function(){
       wishlist.push(currentCard);
     }
     localStorage.setItem("Wishlist", JSON.stringify(wishlist));
-    // wishlist = JSON.parse(localStorage.getItem('Wishlist'));
     searchQuantities();
 
   });
