@@ -56,7 +56,6 @@ $(document).ready(function(){
           $('.buttons').css("visibility", "visible");
           currentCard = value;
           delete currentCard.foreignNames;
-          $('.display-quantities').text('');
           searchQuantities();
           //localStorage.setItem(cardName, JSON.stringify(value));
           break;
@@ -85,7 +84,6 @@ $(document).ready(function(){
           if (value.name === e.currentTarget.innerText){
             $('.card-image').attr("src", value.imageUrl);
             currentCard = value;
-            $('.display-quantities').text('');
             searchQuantities();
             delete currentCard.foreignNames;
             //localStorage.setItem(cardName, JSON.stringify(value));
@@ -123,13 +121,19 @@ $(document).ready(function(){
     for (var card of collection){
       if(card.name === currentCard.name){
         card.collectionQuantity++;
-        localStorage.setItem("Collection", JSON.stringify(collection));
-        return;
+        currentCard.collectionQuantity = card.collectionQuantity;
+        // localStorage.setItem("Collection", JSON.stringify(collection));
+        // return;
       }
     }
-    currentCard.collectionQuantity = 1;
-    collection.push(currentCard);
+    if (currentCard.collectionQuantity === undefined){
+      currentCard.collectionQuantity = 1;
+      collection.push(currentCard);
+    }
     localStorage.setItem("Collection", JSON.stringify(collection));
+    // collection = JSON.parse(localStorage.getItem('Collection'));
+    searchQuantities();
+
   });
 
   // Add to wishlist
@@ -144,17 +148,26 @@ $(document).ready(function(){
     for (var card of wishlist){
       if(card.name === currentCard.name){
         card.wishlistQuantity++;
-        localStorage.setItem("Wishlist", JSON.stringify(wishlist));
-        return;
+        currentCard.wishlistQuantity = card.wishlistQuantity;
+        // localStorage.setItem("Wishlist", JSON.stringify(wishlist));
+        // return;
       }
     }
-    currentCard.wishlistQuantity = 1;
-    wishlist.push(currentCard);
+    if (currentCard.wishlistQuantity === undefined){
+      currentCard.wishlistQuantity = 1;
+      wishlist.push(currentCard);
+    }
     localStorage.setItem("Wishlist", JSON.stringify(wishlist));
+    // wishlist = JSON.parse(localStorage.getItem('Wishlist'));
+    searchQuantities();
+
   });
 
 
   function searchQuantities(){
+
+    //Clear field
+    $('.display-quantities').text('');
 
     // Search collection for quantity
     for (var collectionItem of collection){
@@ -164,7 +177,6 @@ $(document).ready(function(){
     }
     // If not in collection display 0
     if (document.getElementsByClassName('display-quantities')[0].children.length === 0){
-      console.log('here');
       $('.display-quantities').append('<div> # in collection: 0 </div>');
     }
     // Search wishlist for quantity
@@ -175,7 +187,6 @@ $(document).ready(function(){
     }
     // If not in wishlist display 0
     if (document.getElementsByClassName('display-quantities')[0].children.length === 1){
-      console.log('here');
       $('.display-quantities').append('<div> # in wishlist: 0 </div>');
     }
   }
