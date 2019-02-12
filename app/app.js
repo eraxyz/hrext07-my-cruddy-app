@@ -18,16 +18,19 @@ interact with localstorage
 
 $(document).ready(function(){
 
+  // Get collection and wishlist from localStorage
   var collection = JSON.parse(localStorage.getItem('Collection'));
   var wishlist = JSON.parse(localStorage.getItem('Wishlist'));
 
+  // Set collection to empty array if null
   if (collection === null){
     collection = [];
   }
+
+  // Set wishlist to empty array if null
   if (wishlist === null){
     wishlist = [];
   }
-  console.log(collection);
 
   // Curent Card
   var currentCard;
@@ -65,15 +68,10 @@ $(document).ready(function(){
 
     });
 
-    //$('.container-data').html('<div class="display-data-item" data-keyValue="'+ searchData +'"></div>');
     $('.input-key').val('');
   });
 
-
-  // update db
-    // need to expand when  more than 1 item is added
-
-  // delete item
+  // Display clicked card
   $('.container-data').on('click', '.display-result', function(e){
     //console.log(e.currentTarget.innerText);
       $.getJSON("https://api.magicthegathering.io/v1/cards?name=" + e.currentTarget.innerText, function(data){
@@ -85,17 +83,16 @@ $(document).ready(function(){
             currentCard = value;
             searchQuantities();
             delete currentCard.foreignNames;
-            //localStorage.setItem(cardName, JSON.stringify(value));
             break;
           }
         }
-
       });
   });
+
   // delete all?
   $('.btn-clear').click(function(){
     localStorage.clear();
-    $('.container-data').text('');
+    // $('.container-data').text('');
   });
 
   // Add to collection
@@ -150,6 +147,65 @@ $(document).ready(function(){
 
   });
 
+  // Remove from collection
+  $('.remove-collection').click(function(){
+
+    // remove current card being displayed from collection
+    // If in the collection, subtract 1 to quantity
+    // If quantity is now 0, remove from collection
+    // Update collection on localStorage.
+    // Update quantity in collection text shown below the card
+
+    for (var card of collection){
+      if(card.name === currentCard.name){
+        if (card.collectionQuantity > 0){
+            card.collectionQuantity--;
+        }
+        if (card.collectionQuantity === 0){
+            for (var index in collection){
+              if (collection[index].name === card.name){
+                collection.splice(index, 1);
+              }
+            }
+            delete card.collectionQuantity;
+        }
+        currentCard.collectionQuantity = card.collectionQuantity;
+      }
+    }
+
+    localStorage.setItem("Collection", JSON.stringify(collection));
+    searchQuantities();
+
+  });
+
+  // Remove from wishlist
+  $('.remove-wishlist').click(function(){
+
+    // Search through wishlist for card currently being displayed
+    // If found, add 1 to quantity
+    // If quantity now equals 0, remove from wishlist
+    // Update wishlist on localStorage.
+    // Update quantity in wishlist text shown below the card
+
+    for (var card of wishlist){
+      if(card.name === currentCard.name){
+        if (card.wishlistQuantity > 0){
+            card.wishlistQuantity--;
+        }
+        if (card.wishlistQuantity === 0){
+            for (var index in wishlist){
+              if (wishlist[index].name === card.name){
+                wishlist.splice(index, 1);
+              }
+            }
+            delete card.wishlistQuantity;
+        }
+        currentCard.wishlistQuantity = card.wishlistQuantity;
+      }
+    }
+    localStorage.setItem("Wishlist", JSON.stringify(wishlist));
+    searchQuantities();
+  });
 
   function searchQuantities(){
 
