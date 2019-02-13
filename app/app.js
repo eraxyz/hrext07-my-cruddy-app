@@ -35,6 +35,7 @@ $(document).ready(function(){
   // Curent Card
   var currentCard;
 
+  // Search for input
   $('.btn-add').on('click', function(e){
 
     //0. Clear results box1
@@ -69,6 +70,32 @@ $(document).ready(function(){
     });
 
     $('.input-key').val('');
+  });
+
+  // Display collection
+  $('.btn-view-collection').click(function(){
+
+    // Clear data container
+    // Add "Collection" heading
+    // Add all cards in collection
+    // Display first card in collection
+    // Display number of cards in collection
+    // Display number of each individual card in collection
+
+    $('.container-data').text('');
+  });
+
+  // Display wishlist
+  $('.btn-view-wishlsit').click(function(){
+
+    // Clear data container
+    // Add "Wishlist" heading
+    // Add all cards in wishlist
+    // Display first card in wishlist
+    // Display number of cards in wishlist
+    // Display number of each individual card in wishlist 
+
+    $('.container-data').text('');
   });
 
   // Display clicked card

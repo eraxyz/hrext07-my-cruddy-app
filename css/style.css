@@ -13,7 +13,6 @@
   border: 2px solid black;
   display: flex;
   flex-direction: column;
-  /* width: 500px; */
 }
 
 .container-data{
@@ -23,7 +22,6 @@
 
 .btns{
   visibility: hidden;
-  /* align-self: center; */
   margin-right: 5px;
   margin-left: 5px;
 }
@@ -31,7 +29,6 @@
 .card-image{
   height: 310px;
   width: 223px;
-  align-self: center;
   margin-top: 20px;
   margin-bottom: 20px;
 }
@@ -50,12 +47,7 @@
   margin: 5px;
 }
 
-.add-wishlist{
+.container-form{
   display: flex;
-  order: 1;
-}
-
-.add-collection{
-  display: flex;
-  order: 1;
+  justify-content: space-between;
 }
