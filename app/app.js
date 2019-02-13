@@ -56,6 +56,7 @@ $(document).ready(function(){
       for(value of data.cards){
         $('.container-data').append('<div class="display-result">' + value.name + '</div>');
         if (value.name === searchData){
+          // Call function to display card
           $('.card-image').attr("src", value.imageUrl);
           $('.btns').css("visibility", "visible");
           currentCard = value;
@@ -83,19 +84,33 @@ $(document).ready(function(){
     // Display number of each individual card in collection
 
     $('.container-data').text('');
+    $('.container-data').prepend('<h3> Collection </h3>');
+    for (var value of collection){
+      $('.container-data').append('<div class="display-result">' + value.name + '</div>');
+    }
+
+    // Call function to display card
+
   });
 
   // Display wishlist
-  $('.btn-view-wishlsit').click(function(){
+  $('.btn-view-wishlist').click(function(){
 
     // Clear data container
     // Add "Wishlist" heading
     // Add all cards in wishlist
     // Display first card in wishlist
     // Display number of cards in wishlist
-    // Display number of each individual card in wishlist 
+    // Display number of each individual card in wishlist
 
     $('.container-data').text('');
+    $('.container-data').prepend('<h3> Wishlist </h3>');
+    for (var value of wishlist){
+      $('.container-data').append('<div class="display-result">' + value.name + '</div>');
+    }
+
+    // Call function to display card
+
   });
 
   // Display clicked card
