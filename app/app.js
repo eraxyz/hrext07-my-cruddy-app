@@ -55,16 +55,8 @@ $(document).ready(function(){
 
       for(value of data.cards){
         $('.container-data').append('<div class="display-result">' + value.name + '</div>');
-        if (value.name === searchData){
-          // Call function to display card
-          $('.card-image').attr("src", value.imageUrl);
-          $('.btns').css("visibility", "visible");
-          currentCard = value;
-          delete currentCard.foreignNames;
-          searchQuantities();
-          break;
-        }
       }
+      getCardImage(data.cards, searchData);
 
       $('.container-data').prepend('<h3> Results for: "' + searchData+ '" </h3>');
 
@@ -84,12 +76,12 @@ $(document).ready(function(){
     // Display number of each individual card in collection
 
     $('.container-data').text('');
-    $('.container-data').prepend('<h3> Collection </h3>');
+    $('.container-data').prepend('<h3>Collection</h3>');
     for (var value of collection){
-      $('.container-data').append('<div class="display-result">' + value.name + '</div>');
+      $('.container-data').append('<div class="display-result">' + value.collectionQuantity + '\t' + value.name + '</div>');
     }
-
     // Call function to display card
+    getCardImage(collection);
 
   });
 
@@ -104,12 +96,12 @@ $(document).ready(function(){
     // Display number of each individual card in wishlist
 
     $('.container-data').text('');
-    $('.container-data').prepend('<h3> Wishlist </h3>');
+    $('.container-data').prepend('<h3>Wishlist</h3>');
     for (var value of wishlist){
-      $('.container-data').append('<div class="display-result">' + value.name + '</div>');
+      $('.container-data').append('<div class="display-result">' + value.wishlistQuantity + '\t' + value.name + '</div>');
     }
-
     // Call function to display card
+    getCardImage(wishlist);
 
   });
 
@@ -118,16 +110,7 @@ $(document).ready(function(){
     //console.log(e.currentTarget.innerText);
       $.getJSON("https://api.magicthegathering.io/v1/cards?name=" + e.currentTarget.innerText, function(data){
         console.log(data);
-
-        for(value of data.cards){
-          if (value.name === e.currentTarget.innerText){
-            $('.card-image').attr("src", value.imageUrl);
-            currentCard = value;
-            searchQuantities();
-            delete currentCard.foreignNames;
-            break;
-          }
-        }
+        getCardImage(data.cards, e.currentTarget.innerText);
       });
   });
 
@@ -160,6 +143,10 @@ $(document).ready(function(){
     }
     localStorage.setItem("Collection", JSON.stringify(collection));
     searchQuantities();
+    var title = document.getElementsByTagName('h3');
+    if (title[0].textContent === 'Collection'){
+      $('.btn-view-collection').trigger('click');
+    }
 
   });
 
@@ -186,6 +173,10 @@ $(document).ready(function(){
     }
     localStorage.setItem("Wishlist", JSON.stringify(wishlist));
     searchQuantities();
+    var title = document.getElementsByTagName('h3');
+    if (title[0].textContent === 'Wishlist'){
+      $('.btn-view-wishlist').trigger('click');
+    }
 
   });
 
@@ -217,7 +208,10 @@ $(document).ready(function(){
 
     localStorage.setItem("Collection", JSON.stringify(collection));
     searchQuantities();
-
+    var title = document.getElementsByTagName('h3');
+    if (title[0].textContent === 'Collection'){
+      $('.btn-view-collection').trigger('click');
+    }
   });
 
   // Remove from wishlist
@@ -247,6 +241,10 @@ $(document).ready(function(){
     }
     localStorage.setItem("Wishlist", JSON.stringify(wishlist));
     searchQuantities();
+    var title = document.getElementsByTagName('h3');
+    if (title[0].textContent === 'Wishlist'){
+      $('.btn-view-wishlist').trigger('click');
+    }
   });
 
   function searchQuantities(){
@@ -275,6 +273,30 @@ $(document).ready(function(){
     // If not in wishlist display 0
     if (wishlistFound === false){
       $('.w-qty-text').text('# in wishlist: 0');
+    }
+  }
+
+  function getCardImage(array, name){
+    // if name is not passed in, return url of first card in array
+    // if name is passed in, loop through array until card is found
+    // return card image url
+
+    for (var value of array){
+      if (name === undefined){
+        $('.card-image').attr("src", value.imageUrl);
+        $('.btns').css("visibility", "visible");
+        currentCard = value;
+        delete currentCard.foreignNames;
+        searchQuantities();
+        break;
+      } else if (value.name === name){
+        $('.card-image').attr("src", value.imageUrl);
+        $('.btns').css("visibility", "visible");
+        currentCard = value;
+        delete currentCard.foreignNames;
+        searchQuantities();
+        break;
+      }
     }
   }
 
