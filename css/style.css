@@ -52,3 +52,8 @@
   display: flex;
   justify-content: space-between;
 }
+
+.qty{
+  padding: 10px;
+  padding-top: 70px;
+}

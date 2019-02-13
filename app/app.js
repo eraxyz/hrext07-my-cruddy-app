@@ -1,20 +1,3 @@
-/*
-Init app
-interact with DOM
-interact with localstorage
-
- */
-
- // write to db
- //localStorage.setItem(keyData, valueData);
-
- // read from db
- //var displayText = keyData + ' | ' + localStorage.getItem(keyData);
- // this only displays the last one? might want to switch to html
- // and append a div
- // <div class="display-data-item" data-keyValue="keyData">valueData</div>
- // if you use backticks ` you can use ${templateLiterals}
- // TODO make this vars make sense across the app
 
 $(document).ready(function(){
 
@@ -48,13 +31,13 @@ $(document).ready(function(){
     //7. (Opt) Display card text under card image
 
     $('.container-data').text('');
+    $('.qty').text('');
     var searchData = $('.input-key').val();
 
-      $.getJSON("https://api.magicthegathering.io/v1/cards?name=" + searchData, function(data){
-      console.log(data);
+    $.getJSON("https://api.magicthegathering.io/v1/cards?name=" + searchData, function(data){
 
       for(value of data.cards){
-        $('.container-data').append('<div class="display-result">' + value.name + '</div>');
+        $('.container-data').append('<div class="display-result" id='+value.id+'>' + value.name + '</div>');
       }
       getCardImage(data.cards, searchData);
 
@@ -76,9 +59,11 @@ $(document).ready(function(){
     // Display number of each individual card in collection
 
     $('.container-data').text('');
+    $('.qty').text('');
     $('.container-data').prepend('<h3>Collection</h3>');
     for (var value of collection){
-      $('.container-data').append('<div class="display-result">' + value.collectionQuantity + '\t' + value.name + '</div>');
+      $('.qty').append('<div>' + value.collectionQuantity + '\t</div>')
+      $('.container-data').append('<div class="display-result" id='+value.id+'>' + value.name + '</div>');
     }
     // Call function to display card
     getCardImage(collection);
@@ -96,9 +81,11 @@ $(document).ready(function(){
     // Display number of each individual card in wishlist
 
     $('.container-data').text('');
+    $('.qty').text('');
     $('.container-data').prepend('<h3>Wishlist</h3>');
     for (var value of wishlist){
-      $('.container-data').append('<div class="display-result">' + value.wishlistQuantity + '\t' + value.name + '</div>');
+      $('.qty').append('<div>' + value.wishlistQuantity + '\t</div>')
+      $('.container-data').append('<div class="display-result" id='+value.id+'>' + value.name + '</div>');
     }
     // Call function to display card
     getCardImage(wishlist);
@@ -107,11 +94,20 @@ $(document).ready(function(){
 
   // Display clicked card
   $('.container-data').on('click', '.display-result', function(e){
-    //console.log(e.currentTarget.innerText);
-      $.getJSON("https://api.magicthegathering.io/v1/cards?name=" + e.currentTarget.innerText, function(data){
-        console.log(data);
-        getCardImage(data.cards, e.currentTarget.innerText);
-      });
+
+    $.getJSON("https://api.magicthegathering.io/v1/cards?id=" + e.currentTarget.id, function(data){
+      if (data.cards[0].hasOwnProperty('imageUrl')){
+        $('.card-image').attr("src", data.cards[0].imageUrl);
+        $('.btns').css("visibility", "visible");
+        currentCard = data.cards[0];
+        delete currentCard.foreignNames;
+        searchQuantities();
+      } else {
+        $.getJSON("https://api.magicthegathering.io/v1/cards?name=" + e.currentTarget.innerText, function(data){
+          getCardImage(data.cards, e.currentTarget.innerText);
+        });
+      }
+    });
   });
 
   // delete all?
@@ -145,7 +141,10 @@ $(document).ready(function(){
     searchQuantities();
     var title = document.getElementsByTagName('h3');
     if (title[0].textContent === 'Collection'){
+      // Set current card to temp variable so card image doesn't change if already in collection
+      var temp = currentCard;
       $('.btn-view-collection').trigger('click');
+      getCardImage(collection, temp.name);
     }
 
   });
@@ -175,7 +174,10 @@ $(document).ready(function(){
     searchQuantities();
     var title = document.getElementsByTagName('h3');
     if (title[0].textContent === 'Wishlist'){
+      // Set current card to temp variable so card image doesn't change if already in wishlist
+      var temp = currentCard;
       $('.btn-view-wishlist').trigger('click');
+      getCardImage(wishlist, temp.name);
     }
 
   });
@@ -192,15 +194,15 @@ $(document).ready(function(){
     for (var card of collection){
       if(card.name === currentCard.name){
         if (card.collectionQuantity > 0){
-            card.collectionQuantity--;
+          card.collectionQuantity--;
         }
         if (card.collectionQuantity === 0){
-            for (var index in collection){
-              if (collection[index].name === card.name){
-                collection.splice(index, 1);
-              }
+          for (var index in collection){
+            if (collection[index].name === card.name){
+              collection.splice(index, 1);
             }
-            delete card.collectionQuantity;
+          }
+          delete card.collectionQuantity;
         }
         currentCard.collectionQuantity = card.collectionQuantity;
       }
@@ -210,7 +212,10 @@ $(document).ready(function(){
     searchQuantities();
     var title = document.getElementsByTagName('h3');
     if (title[0].textContent === 'Collection'){
+      // Set current card to temp variable so card image doesn't change if already in collection
+      var temp = currentCard;
       $('.btn-view-collection').trigger('click');
+      getCardImage(collection, temp.name);
     }
   });
 
@@ -226,15 +231,15 @@ $(document).ready(function(){
     for (var card of wishlist){
       if(card.name === currentCard.name){
         if (card.wishlistQuantity > 0){
-            card.wishlistQuantity--;
+          card.wishlistQuantity--;
         }
         if (card.wishlistQuantity === 0){
-            for (var index in wishlist){
-              if (wishlist[index].name === card.name){
-                wishlist.splice(index, 1);
-              }
+          for (var index in wishlist){
+            if (wishlist[index].name === card.name){
+              wishlist.splice(index, 1);
             }
-            delete card.wishlistQuantity;
+          }
+          delete card.wishlistQuantity;
         }
         currentCard.wishlistQuantity = card.wishlistQuantity;
       }
@@ -243,7 +248,10 @@ $(document).ready(function(){
     searchQuantities();
     var title = document.getElementsByTagName('h3');
     if (title[0].textContent === 'Wishlist'){
+      // Set current card to temp variable so card image doesn't change if already in wishlist
+      var temp = currentCard;
       $('.btn-view-wishlist').trigger('click');
+      getCardImage(wishlist, temp.name);
     }
   });
 
