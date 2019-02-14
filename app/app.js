@@ -58,16 +58,28 @@ $(document).ready(function(){
     // Display number of cards in collection
     // Display number of each individual card in collection
 
-    $('.container-data').text('');
-    $('.qty').text('');
-    $('.container-data').prepend('<h3>Collection</h3>');
-    for (var value of collection){
-      $('.qty').append('<div>' + value.collectionQuantity + '\t</div>')
-      $('.container-data').append('<div class="display-result" id='+value.id+'>' + value.name + '</div>');
-    }
-    // Call function to display card
-    getCardImage(collection);
+    // If collection is empty display "how to use" message and mtg card back
+    if (collection.length === 0){
+      $('.container-data').text(`My MTG Card Collection is a tool to help you keep track of your physical card collection. It can also serve as a way to look up cards and create a wishlist. To begin, search the name of a card and click on the card you're looking for from the results. From there you can add it to your collection or wishlist. To view you collection or wishlist, click on the "My Collection" or "My Wishlist" buttons. To clear all cards from a list, click on the corresponding reset button.`);
+      $('.qty').text('');
+      $('.card-image').attr('src', 'Card-back.jpg');
+      $('.card-image').css("visibility", "visible");
+      $('.btns').css("visibility", "hidden");
+      $('.c-qty-text').text('');
+      $('.w-qty-text').text('');
 
+    } else {
+
+      $('.container-data').text('');
+      $('.qty').text('');
+      $('.container-data').prepend('<h3>Collection</h3>');
+      for (var value of collection){
+        $('.qty').append('<div>' + value.collectionQuantity + '\t</div>')
+        $('.container-data').append('<div class="display-result" id='+value.id+'>' + value.name + '</div>');
+      }
+      // Call function to display card
+      getCardImage(collection);
+    }
   });
 
   // Display wishlist
@@ -110,10 +122,26 @@ $(document).ready(function(){
     });
   });
 
-  // delete all?
-  $('.btn-clear').click(function(){
-    localStorage.clear();
-    // $('.container-data').text('');
+  // delete collection
+  $('.btn-clear-collection').click(function(){
+
+    if(window.confirm("Are you sure you want to delete all data from your collection?")){
+      collection = [];
+      localStorage.setItem('Collection', collection);
+      $('.btn-view-collection').trigger('click');
+    }
+
+  });
+
+  // delete wishlist
+  $('.btn-clear-wishlist').click(function(){
+
+    if(window.confirm("Are you sure you want to delete all data from your wishlist?")){
+      wishlist = [];
+      localStorage.setItem('Wishlist', []);
+      $('.btn-view-collection').trigger('click');
+    }
+
   });
 
   // Add to collection
@@ -129,8 +157,6 @@ $(document).ready(function(){
       if(card.name === currentCard.name){
         card.collectionQuantity++;
         currentCard.collectionQuantity = card.collectionQuantity;
-        // localStorage.setItem("Collection", JSON.stringify(collection));
-        // return;
       }
     }
     if (currentCard.collectionQuantity === undefined){
@@ -162,8 +188,6 @@ $(document).ready(function(){
       if(card.name === currentCard.name){
         card.wishlistQuantity++;
         currentCard.wishlistQuantity = card.wishlistQuantity;
-        // localStorage.setItem("Wishlist", JSON.stringify(wishlist));
-        // return;
       }
     }
     if (currentCard.wishlistQuantity === undefined){
@@ -287,7 +311,9 @@ $(document).ready(function(){
   function getCardImage(array, name){
     // if name is not passed in, return url of first card in array
     // if name is passed in, loop through array until card is found
-    // return card image url
+    // display card
+
+    $('.card-image').css("visibility", "visible");
 
     for (var value of array){
       if (name === undefined){
@@ -307,5 +333,7 @@ $(document).ready(function(){
       }
     }
   }
+
+  $('.btn-view-collection').trigger('click');
 
 });

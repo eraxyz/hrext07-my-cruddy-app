@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
   <meta charset="UTF-8">
-  <title>HREXT07 R00lz!</title>
+  <title>MTG Collector</title>
   <script
           src="https://code.jquery.com/jquery-3.3.1.js"
           integrity="sha256-2Kok7MbOyxpgUVvAk/HJ2jigOSYS2auK4Pfzbm7uH60="
@@ -29,14 +29,16 @@ container for the response-feedback (start with alert)
     <header>My Magic: The Gathering Collection</header>
     <div class="container-form">
       <input type="text" class="input-key" placeholder="Search card by name">
-      <div class="top-buttons">
-        <button class="btn-add">Search</button>
-        <button class="btn-view-collection">Collection</button>
-        <button class="btn-view-wishlist">Wishlist</button>
-        <button class="btn-clear">Clear</button>
-      </div>
+      <button class="btn-add">Search</button>
+    </div>
+    <div class="top-buttons">
+      <button class="btn-view-collection top">My Collection</button>
+      <button class="btn-view-wishlist top">My Wishlist</button>
+      <button class="btn-clear-collection top">Reset Collection</button>
+      <button class="btn-clear-wishlist top">Reset Wishlist</button>
     </div>
     <div class="container-main">
+
       <div class="qty"></div>
       <div class="container-data"></div>
       <div class="container-image">
@@ -54,8 +56,10 @@ container for the response-feedback (start with alert)
           </div>
         </div>
       </div>
+
     </div>
   </div>
-
+  <img class="jace" src="Jace.png">
+  <img class="tezzeret" src="Tezzeret.png">
 </body>
 </html>
