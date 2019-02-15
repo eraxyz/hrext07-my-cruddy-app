@@ -1,9 +1,23 @@
 
 $(document).ready(function(){
 
+  var collection;
+  var wishlist;
+  var currentCard;
+
+  //Bug fix for case of empty Collection or wishlist
+  if (localStorage.getItem('Collection') === ''){
+    collection = [];
+  }
+  if (localStorage.getItem('Wishlist') === ''){
+    wishlist = [];
+  }
+
   // Get collection and wishlist from localStorage
-  var collection = JSON.parse(localStorage.getItem('Collection'));
-  var wishlist = JSON.parse(localStorage.getItem('Wishlist'));
+  if (collection === undefined && wishlist === undefined){
+    collection = JSON.parse(localStorage.getItem('Collection'));
+    wishlist = JSON.parse(localStorage.getItem('Wishlist'));
+  }
 
   // Set collection to empty array if null
   if (collection === null){
@@ -14,9 +28,6 @@ $(document).ready(function(){
   if (wishlist === null){
     wishlist = [];
   }
-
-  // Curent Card
-  var currentCard;
 
   // Search for input
   $('.btn-add').on('click', function(e){
@@ -60,7 +71,7 @@ $(document).ready(function(){
 
     // If collection is empty display "how to use" message and mtg card back
     if (collection.length === 0){
-      $('.container-data').text(`My MTG Card Collection is a tool to help you keep track of your physical card collection. It can also serve as a way to look up cards and create a wishlist. To begin, search the name of a card and click on the card you're looking for from the results. From there you can add it to your collection or wishlist. To view you collection or wishlist, click on the "My Collection" or "My Wishlist" buttons. To clear all cards from a list, click on the corresponding reset button.`);
+      $('.container-data').text(`My MTG Card Collection is a tool to help you keep track of your physical card collection. It can also serve as a way to look up cards and create a wishlist. To begin, search the name of a card and click on the card you're looking for from the results. From there you can add it to your collection or wishlist. To view your collection or wishlist, click on the "My Collection" or "My Wishlist" buttons. To clear all cards from a list, click on the corresponding reset button.`);
       $('.qty').text('');
       $('.card-image').attr('src', 'Card-back.jpg');
       $('.card-image').css("visibility", "visible");
